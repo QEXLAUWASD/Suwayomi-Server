@@ -115,19 +115,38 @@ object CEFManager {
                 if (CefApp.getInstanceIfAny() == null) {
                     val config =
                         JCefAppConfig.getInstance(cefDir.toString(), false).apply {
-                            appArgsAsList.addAll(
-                                arrayOf(
-                                    "--disable-gpu",
-                                    // #1486 needed to be able to render without a window
-                                    "--off-screen-rendering-enabled",
-                                    // #1489 since /dev/shm is restricted in docker (OOM)
-                                    "--disable-dev-shm-usage",
-                                    // #1723 support Widevine (incomplete)
-                                    "--enable-widevine-cdm",
-                                    // #1736 JCEF does implement stack guards properly
-                                    "--change-stack-guard-on-fork=disable",
-                                ),
-                            )
+                            val enableGpu = serverConfig.kcefHardwareAcceleration.value
+                            if (enableGpu) {
+                                appArgsAsList.addAll(
+                                    arrayOf(
+                                        "--enable-gpu-rasterization",
+                                        "--enable-accelerated-2d-canvas",
+                                        "--enable-features=VaapiIgnoreDriverChecks",
+                                        // #1486 needed to be able to render without a window
+                                        "--off-screen-rendering-enabled",
+                                        // #1489 since /dev/shm is restricted in docker (OOM)
+                                        "--disable-dev-shm-usage",
+                                        // #1723 support Widevine (incomplete)
+                                        "--enable-widevine-cdm",
+                                        // #1736 JCEF does implement stack guards properly
+                                        "--change-stack-guard-on-fork=disable",
+                                    ),
+                                )
+                            } else {
+                                appArgsAsList.addAll(
+                                    arrayOf(
+                                        "--disable-gpu",
+                                        // #1486 needed to be able to render without a window
+                                        "--off-screen-rendering-enabled",
+                                        // #1489 since /dev/shm is restricted in docker (OOM)
+                                        "--disable-dev-shm-usage",
+                                        // #1723 support Widevine (incomplete)
+                                        "--enable-widevine-cdm",
+                                        // #1736 JCEF does implement stack guards properly
+                                        "--change-stack-guard-on-fork=disable",
+                                    ),
+                                )
+                            }
                             cefSettings.apply {
                                 windowless_rendering_enabled = true
                                 cache_path = (Path(applicationDirs.dataRoot) / "cache/kcef").absolutePathString()

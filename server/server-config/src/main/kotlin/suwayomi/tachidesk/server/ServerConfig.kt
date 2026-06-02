@@ -1038,6 +1038,14 @@ class ServerConfig(
         description = "Enable the WebView via CEF (Chromium)"
     )
 
+    val kcefHardwareAcceleration: MutableStateFlow<Boolean> by BooleanSetting(
+        protoNumber = 87,
+        group = SettingGroup.WEB_VIEW,
+        privacySafe = true,
+        defaultValue = true,
+        description = "Enable GPU hardware acceleration for the WebView (CEF/Chromium). Disable if running in a headless environment without GPU."
+    )
+
 
 
     /** ****************************************************************** **/
