@@ -171,6 +171,8 @@ jobs:
           if-no-files-found: error
 
   release:
+    permissions:
+      contents: write
     needs: bundle
     runs-on: ubuntu-latest
     steps:
@@ -213,7 +215,6 @@ jobs:
           repository: "QEXLAUWASD/Suwayomi-Server"
           ref: main
           path: preview
-          token: ${{ secrets.DEPLOY_PREVIEW_TOKEN }}
 
       - name: Generate Tag Name
         id: GenTagName
@@ -242,7 +243,7 @@ jobs:
       - name: Upload Preview Release
         uses: softprops/action-gh-release@v3
         with:
-          token: ${{ secrets.DEPLOY_PREVIEW_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           repository: "Suwayomi/Suwayomi-Server-preview"
           tag_name:  ${{ steps.GenTagName.outputs.value }}
           files: release/*
