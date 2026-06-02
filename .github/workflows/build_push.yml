@@ -210,7 +210,7 @@ jobs:
       - name: Checkout Preview branch
         uses: actions/checkout@v6
         with:
-          repository: "Suwayomi/Suwayomi-Server-preview"
+          repository: "QEXLAUWASD/Suwayomi-Server"
           ref: main
           path: preview
           token: ${{ secrets.DEPLOY_PREVIEW_TOKEN }}
